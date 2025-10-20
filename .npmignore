@@ -1,0 +1,25 @@
+# Source files
+src/
+
+# Tests
+src/__tests__/
+*.test.ts
+
+# Development files
+.git
+.gitignore
+.env*
+*.log
+
+# Config files
+jest.config.js
+tsconfig.json
+TESTING.md
+QUICK_TEST_GUIDE.md
+
+# Coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
