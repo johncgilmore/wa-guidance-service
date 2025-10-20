@@ -1,6 +1,6 @@
 {
   "name": "wa-guidance-service",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Washington ESSB 5814 guidance chatbot service - provides AI-powered assistance for tax guidance questions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
