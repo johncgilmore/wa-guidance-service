@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+npm-debug.log
+npm-error.log
+yarn-error.log
+pnpm-debug.log
+
+# Environment variables (NEVER commit these)
+.env
+.env.local
+.env.*.local
+.env.*.secret
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# OS
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
