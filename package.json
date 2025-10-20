@@ -1,5 +1,5 @@
 {
-  "name": "@cstreettax/wa-guidance-service",
+  "name": "wa-guidance-service",
   "version": "0.1.0",
   "description": "Washington ESSB 5814 guidance chatbot service - provides AI-powered assistance for tax guidance questions",
   "private": true,
