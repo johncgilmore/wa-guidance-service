@@ -1,19 +1,15 @@
-# Source files
-src/
-
-# Tests
-src/__tests__/
+# Test files
 *.test.ts
+*.test.js
+__tests__/
 
 # Development files
+tsconfig.json
+jest.config.js
 .git
 .gitignore
 .env*
 *.log
-
-# Config files
-jest.config.js
-tsconfig.json
 TESTING.md
 QUICK_TEST_GUIDE.md
 
@@ -23,3 +19,6 @@ coverage/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Build artifacts that shouldn't be in npm package
+*.tsbuildinfo
