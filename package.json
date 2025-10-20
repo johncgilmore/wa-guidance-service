@@ -1,0 +1,26 @@
+{
+  "name": "@cstreettax/wa-guidance-service",
+  "version": "0.1.0",
+  "description": "Washington ESSB 5814 guidance chatbot service - provides AI-powered assistance for tax guidance questions",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "openai": "^4.67.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5"
+  }
+}
