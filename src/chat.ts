@@ -1,10 +1,9 @@
 import OpenAI from 'openai';
-import { promises as fs } from 'fs';
-import path from 'path';
 
 import { type WaTileId, type ChatMessage, type ChatResponse, type ChatServiceOptions } from './types';
-import { GUIDANCE_BY_TILE, GUIDANCE_SHARED, isWaTileId } from './guidanceMap';
+import { isWaTileId } from './guidanceMap';
 import { buildSystemPrompt } from './prompts';
+import { loadGuidanceForTile } from './guidanceLoader';
 
 const MAX_CONTEXT_CHARS = 18000;
 
@@ -29,36 +28,27 @@ export class WaGuidanceChatService {
   }
 
   /**
-   * Load guidance text from a file
-   */
-  private async loadGuidanceFile(href: string, label: string): Promise<string> {
-    if (!this.guidanceDir) {
-      throw new Error('Cannot load guidance files: guidanceDir not configured');
-    }
-
-    // Remove leading slash and resolve path
-    const relativePath = href.replace(/^\//, '');
-    const absolutePath = path.join(this.guidanceDir, relativePath);
-    const text = await fs.readFile(absolutePath, 'utf8');
-    return `Source: ${label}\n\n${text.trim()}`;
-  }
-
-  /**
    * Build the context block by loading all relevant guidance documents
    */
   private async buildContextBlock(tileId: WaTileId): Promise<string> {
-    // If guidanceDir is not set, return empty context
-    // (useful for testing or when docs are embedded elsewhere)
-    if (!this.guidanceDir) {
-      return '[Guidance documents would be loaded here]';
+    try {
+      const guidanceText = await loadGuidanceForTile(tileId, this.guidanceDir);
+      
+      // Trim to max length
+      if (guidanceText.length > this.maxContextChars) {
+        return guidanceText.slice(0, this.maxContextChars) + '\n\n[Content truncated due to length]';
+      }
+      return guidanceText;
+    } catch (error) {
+      // If no guidanceDir is set and bundled guidance fails, provide helpful error
+      if (!this.guidanceDir) {
+        throw new Error(
+          'No guidance files found. Either provide guidanceDir option pointing to your guidance files, ' +
+          'or ensure the package includes bundled guidance documents.'
+        );
+      }
+      throw error;
     }
-
-    const entries = [...(GUIDANCE_BY_TILE[tileId] ?? []), ...GUIDANCE_SHARED];
-    const sections = await Promise.all(
-      entries.map((entry) => this.loadGuidanceFile(entry.href, entry.label))
-    );
-    const joined = sections.join('\n\n---\n\n');
-    return joined.length > this.maxContextChars ? joined.slice(0, this.maxContextChars) : joined;
   }
 
   /**

@@ -23,4 +23,5 @@
 export { WaGuidanceChatService } from './chat';
 export { buildSystemPrompt, WA_CHAT_DISCLAIMER } from './prompts';
 export { GUIDANCE_BY_TILE, GUIDANCE_SHARED, isWaTileId } from './guidanceMap';
+export { loadGuidanceForTile, getGuidanceMetadata } from './guidanceLoader';
 export type { WaTileId, GuidanceEntry, ChatMessage, ChatServiceOptions, ChatResponse, ChatRequest } from './types';

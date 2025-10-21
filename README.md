@@ -36,20 +36,8 @@ Input (tile ID + messages)
 
 ## Installation
 
-### Option 1: Local Development (Current Setup)
-
-The service lives in `/wa-guidance-service` within the cstreet repo. Import it directly:
-
-```typescript
-import { WaGuidanceChatService } from '@/wa-guidance-service/src';
-```
-
-### Option 2: Future npm Package
-
-Once extracted to its own repo:
-
 ```bash
-npm install @cstreettax/wa-guidance-service
+npm install wa-guidance-service
 ```
 
 ## Usage
@@ -57,13 +45,11 @@ npm install @cstreettax/wa-guidance-service
 ### Basic Example
 
 ```typescript
-import { WaGuidanceChatService } from '@cstreettax/wa-guidance-service';
-import path from 'path';
+import { WaGuidanceChatService } from 'wa-guidance-service';
 
-// Initialize the service
+// Initialize the service (uses bundled guidance automatically)
 const service = new WaGuidanceChatService({
   apiKey: process.env.OPENAI_API_KEY,
-  guidanceDir: path.join(process.cwd(), 'public'), // Where guidance docs live
 });
 
 // Send a chat request
@@ -117,7 +103,7 @@ When creating a service instance, pass an options object:
 interface ChatServiceOptions {
   apiKey?: string;              // OpenAI API key (defaults to OPENAI_API_KEY env var)
   maxContextChars?: number;     // Max chars to include from guidance (default: 18000)
-  guidanceDir?: string;         // Path to guidance documents on filesystem
+  guidanceDir?: string;         // Optional: Path to custom guidance docs (uses bundled by default)
 }
 ```
 
@@ -164,40 +150,56 @@ interface ChatResponse {
 }
 ```
 
-## Guidance Document Structure
+## Bundled Guidance Documents
 
-Guidance documents are stored in `/public/wa-guidance/{tile}/guidance.txt`:
+**NEW**: Guidance documents are now bundled IN the package! 🎉
+
+The package includes curated, up-to-date WA DOR guidance that's maintained by C Street Tax. Just install and use - no need to manage separate guidance files.
+
+### Guidance Structure
 
 ```
-public/wa-guidance/
-├── it/
-│   └── guidance.txt
-├── marketing/
-│   └── guidance.txt
-├── webdev/
-│   └── guidance.txt
-├── software/
-│   └── guidance.txt
-├── engineering/
-│   └── guidance.txt
-├── staffing/
-│   └── guidance.txt
-├── security/
-│   └── guidance.txt
-├── presentations/
-│   └── guidance.txt
-├── professional-services/
-│   └── guidance.txt
-├── data-processing/
-│   └── guidance.txt
-├── contracts/
-│   └── guidance.txt
-└── shared/
-    └── das-retail/
-        └── guidance.txt (cross-cutting reference)
+guidance/wa-guidance/
+├── it/guidance.txt
+├── marketing/guidance.txt
+├── webdev/guidance.txt
+├── software/guidance.txt
+├── engineering/guidance.txt
+├── staffing/guidance.txt
+├── security/guidance.txt
+├── presentations/guidance.txt
+├── professional-services/guidance.txt
+├── data-processing/guidance.txt
+├── contracts/guidance.txt
+└── shared/das-retail/guidance.txt
 ```
 
-Each file contains extracted plain text from Washington Department of Revenue interim guidance.
+### Keeping Guidance Current
+
+The package is regularly updated when WA DOR releases new guidance:
+- 🤖 **Automated checks**: GitHub Action monitors for updates weekly
+- 📅 **Version tracking**: Check `guidance/metadata.json` for last update dates
+- 📦 **Easy updates**: Run `npm update wa-guidance-service` to get the latest
+
+To see current guidance version:
+```typescript
+import { getGuidanceMetadata } from 'wa-guidance-service';
+
+const metadata = await getGuidanceMetadata();
+console.log(metadata.version); // e.g., "2025.1"
+console.log(metadata.lastChecked); // e.g., "2025-10-20"
+```
+
+### Using Custom Guidance (Optional)
+
+If you want to use your own guidance files instead of the bundled ones:
+
+```typescript
+const service = new WaGuidanceChatService({
+  apiKey: process.env.OPENAI_API_KEY,
+  guidanceDir: path.join(process.cwd(), 'my-custom-guidance'),
+});
+```
 
 ## Error Handling
 
@@ -223,27 +225,17 @@ Common errors:
 | `OpenAI API key is required` | Missing OPENAI_API_KEY env var or apiKey option |
 | `Invalid or missing tile id` | tileId doesn't match valid WaTileId |
 | `Messages must be an array` | messages parameter is not an array |
-| `Cannot load guidance files: guidanceDir not configured` | guidanceDir not provided to service |
+| `No guidance files found` | Bundled guidance missing AND no guidanceDir provided |
 | `OpenAI returned invalid JSON response` | OpenAI returned malformed JSON |
 
-## Future Separation
+## Contributing
 
-When you're ready to extract this into its own repository:
+Found an error in the guidance or have suggestions? 
 
-```bash
-# In the cstreet project
-$ git checkout feature/modularize-wa-service
-$ cd wa-guidance-service
-$ git init
-$ git add .
-$ git commit -m "Initial commit: WA guidance service"
-$ git remote add origin https://github.com/cstreettax/wa-guidance-service.git
-$ git push -u origin main
-```
+- [Open an issue](https://github.com/johncgilmore/wa-guidance-service/issues)
+- [Submit a pull request](https://github.com/johncgilmore/wa-guidance-service/pulls)
 
-The service can then be installed via:
-- GitHub: `npm install github:cstreettax/wa-guidance-service`
-- npm registry: `npm install @cstreettax/wa-guidance-service`
+For guidance updates, see [UPDATING_GUIDANCE.md](./UPDATING_GUIDANCE.md).
 
 ## Development
 

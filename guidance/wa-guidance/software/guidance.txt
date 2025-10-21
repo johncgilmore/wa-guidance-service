@@ -1,0 +1,19 @@
+Washington Department of Revenue - Interim Guidance
+ESSB 5814: Software Development Services
+
+[PLACEHOLDER - Add actual WA DOR guidance content here]
+
+This file should contain the text extracted from Washington Department of Revenue's 
+interim guidance documents for custom software development services under ESSB 5814.
+
+Source: https://dor.wa.gov/taxes-rates/other-taxes/digital-products-and-services
+
+To add guidance:
+1. Visit the WA DOR website
+2. Download/copy the relevant guidance document
+3. Extract the text content (remove formatting, keep structure)
+4. Paste here
+5. Update guidance/metadata.json with the date
+
+Last Updated: [Add date when real content is added]
+
